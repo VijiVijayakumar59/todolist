@@ -60,4 +60,12 @@ class ImagePickerController extends GetxController {
     // Remove the note from the notes list
     notes.removeAt(index);
   }
+
+  Future<void> deleteAllNotes() async {
+    // Clear the notes list
+    notes.clear();
+
+    // Clear the Hive box
+    await noteBox.clear();
+  }
 }

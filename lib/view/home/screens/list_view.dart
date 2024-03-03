@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:todolist/controller/image_controller.dart';
 import 'package:todolist/view/edit/screens/edit_screen.dart';
 import 'package:todolist/view/home/widgets/create_note_widget.dart';
@@ -48,7 +49,7 @@ class TodoListScreen extends StatelessWidget {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              imageController.deleteAllNotes();
                             },
                             child: const AlertButton(text: "Delete"),
                           ),
@@ -171,6 +172,12 @@ class TodoListScreen extends StatelessWidget {
                                     },
                                   );
                                 } else if (value == 2) {
+                                  _onShare(
+                                    context,
+                                    imageController.notes[index]['title'],
+                                    imageController.notes[index]['note'],
+                                    imageController.pickedImageFile.value,
+                                  );
                                 } else if (value == 3) {
                                   // Implement delete functionality
                                   _showDeleteConfirmationDialog(
@@ -233,5 +240,23 @@ class TodoListScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _onShare(
+      BuildContext context, String title, String note, File? imageFile) async {
+    // Combine the title and note into text
+    String text = '$title\n$note';
+
+    try {
+      // Share the text and image file (if available)
+      if (imageFile != null) {
+        await Share.shareFiles([imageFile.path], text: text);
+      } else {
+        await Share.share(text);
+      }
+    } catch (e) {
+      // Handle errors, if any
+      print('Error sharing: $e');
+    }
   }
 }
