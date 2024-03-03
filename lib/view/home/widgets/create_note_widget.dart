@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:todolist/controller/image_controller.dart';
 
 class CreateNoteScreen extends StatelessWidget {
@@ -14,13 +13,6 @@ class CreateNoteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController titleController = TextEditingController();
     TextEditingController noteController = TextEditingController();
-
-    final noteBox = Hive.box('note_box');
-
-    Future<void> createNote(Map<String, dynamic> newNote) async {
-      await noteBox.add(newNote);
-      print("Note count is ${noteBox.length}");
-    }
 
     final ImagePickerController controller = Get.find();
     return SafeArea(
@@ -86,6 +78,8 @@ class CreateNoteScreen extends StatelessWidget {
                           const SizedBox(height: 20),
                           TextFormField(
                             controller: titleController,
+                            onChanged: (value) =>
+                                controller.title.value = value,
                             decoration: const InputDecoration(
                               labelText: 'Title',
                               border: OutlineInputBorder(),
@@ -94,6 +88,7 @@ class CreateNoteScreen extends StatelessWidget {
                           const SizedBox(height: 20),
                           TextFormField(
                             controller: noteController,
+                            onChanged: (value) => controller.note.value = value,
                             maxLines: 5,
                             decoration: const InputDecoration(
                               labelText: 'Notes',
@@ -103,15 +98,11 @@ class CreateNoteScreen extends StatelessWidget {
                           const SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: () async {
-                              createNote({
-                                "title": titleController.text,
-                                "note": noteController.text,
-                                "imagePath":
-                                    controller.pickedImageFile.value?.path ??
-                                        '',
-                              });
-                              titleController.text = '';
-                              noteController.text = '';
+                              controller.title.value = titleController.text;
+                              controller.note.value = noteController.text;
+                              await controller.createNote();
+                              titleController.clear();
+                              noteController.clear();
                               Get.back();
                             },
                             child: const Text('Save'),
