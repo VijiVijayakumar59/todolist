@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:hive/hive.dart';
 part 'todo_model.g.dart';
 
@@ -7,8 +8,11 @@ class TodoModel extends HiveObject {
   String? title;
   @HiveField(1)
   String? note;
+  @HiveField(2)
+  File? imagePath;
   TodoModel({
     this.note,
     this.title,
+    this.imagePath,
   });
 }

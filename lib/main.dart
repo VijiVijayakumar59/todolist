@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:todolist/controller/image_controller.dart';
+import 'package:todolist/controller/todo_controller.dart';
 import 'package:todolist/model/todo_model.dart';
 import 'package:todolist/view/home/screens/list_view.dart';
 
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       initialBinding: BindingsBuilder(() {
-        Get.put(ImagePickerController());
+        Get.put(TodoController());
       }),
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',

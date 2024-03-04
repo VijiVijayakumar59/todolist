@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:todolist/controller/image_controller.dart';
+import 'package:todolist/controller/todo_controller.dart';
 
 class CreateNoteScreen extends StatelessWidget {
   const CreateNoteScreen({
@@ -14,7 +14,7 @@ class CreateNoteScreen extends StatelessWidget {
     TextEditingController titleController = TextEditingController();
     TextEditingController noteController = TextEditingController();
 
-    final ImagePickerController controller = Get.find();
+    final TodoController controller = Get.find();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -40,7 +40,7 @@ class CreateNoteScreen extends StatelessWidget {
               top: 8,
             ),
             child: SingleChildScrollView(
-              child: GetBuilder<ImagePickerController>(
+              child: GetBuilder<TodoController>(
                 builder: (controller) => Obx(
                   () => Card(
                     elevation: 10,
@@ -94,6 +94,7 @@ class CreateNoteScreen extends StatelessWidget {
                               labelText: 'Notes',
                               border: OutlineInputBorder(),
                             ),
+                            keyboardType: TextInputType.emailAddress,
                           ),
                           const SizedBox(height: 20),
                           ElevatedButton(

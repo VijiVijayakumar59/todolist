@@ -1,16 +1,18 @@
-// ignore_for_file: unused_local_variable
+// ignore_for_file: unused_local_variable, avoid_print, deprecated_member_use
 
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:todolist/controller/image_controller.dart';
+import 'package:todolist/controller/delete_confirmation.dart';
+import 'package:todolist/controller/share.dart';
+import 'package:todolist/controller/todo_controller.dart';
+import 'package:todolist/utils/constants/colors.dart';
 import 'package:todolist/view/edit/screens/edit_screen.dart';
 import 'package:todolist/view/home/widgets/create_note_widget.dart';
 import 'package:todolist/view/home/widgets/note_view_widget.dart';
 import 'package:todolist/view/home/widgets/alert_button.dart';
-import 'package:todolist/view/home/widgets/sizedBox.dart';
+import 'package:todolist/utils/constants/sized_Box.dart';
 
 class TodoListScreen extends StatelessWidget {
   const TodoListScreen({
@@ -19,7 +21,7 @@ class TodoListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ImagePickerController imageController = Get.find();
+    final TodoController imageController = Get.find();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -50,6 +52,7 @@ class TodoListScreen extends StatelessWidget {
                           TextButton(
                             onPressed: () {
                               imageController.deleteAllNotes();
+                              Get.back();
                             },
                             child: const AlertButton(text: "Delete"),
                           ),
@@ -65,7 +68,7 @@ class TodoListScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: GetBuilder<ImagePickerController>(
+        body: GetBuilder<TodoController>(
           builder: (imageController) {
             return Obx(() {
               final noteBox = Hive.box("note_box");
@@ -114,6 +117,7 @@ class TodoListScreen extends StatelessWidget {
                                   ? ClipOval(
                                       child: Image.file(
                                         imageController.pickedImageFile.value!,
+                                        fit: BoxFit.fill,
                                       ),
                                     )
                                   : const Icon(
@@ -172,15 +176,14 @@ class TodoListScreen extends StatelessWidget {
                                     },
                                   );
                                 } else if (value == 2) {
-                                  _onShare(
+                                  onShare(
                                     context,
                                     imageController.notes[index]['title'],
                                     imageController.notes[index]['note'],
                                     imageController.pickedImageFile.value,
                                   );
                                 } else if (value == 3) {
-                                  // Implement delete functionality
-                                  _showDeleteConfirmationDialog(
+                                  deleteConfirmationDialog(
                                       context, index, imageController);
                                 }
                               },
@@ -203,60 +206,10 @@ class TodoListScreen extends StatelessWidget {
             onPressed: () {
               Get.to(const CreateNoteScreen());
             },
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
+            child: const Icon(Icons.add, color: whiteColor),
           ),
         ),
       ),
     );
-  }
-
-  Future<void> _showDeleteConfirmationDialog(BuildContext context, int index,
-      ImagePickerController imageController) async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Delete Note"),
-          content: const Text("Are you sure you want to delete this note?"),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () {
-                // Call the deleteNote method from ImagePickerController
-                imageController.deleteNote(index);
-                Navigator.of(context).pop();
-              },
-              child: const Text("Delete"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _onShare(
-      BuildContext context, String title, String note, File? imageFile) async {
-    // Combine the title and note into text
-    String text = '$title\n$note';
-
-    try {
-      // Share the text and image file (if available)
-      if (imageFile != null) {
-        await Share.shareFiles([imageFile.path], text: text);
-      } else {
-        await Share.share(text);
-      }
-    } catch (e) {
-      // Handle errors, if any
-      print('Error sharing: $e');
-    }
   }
 }

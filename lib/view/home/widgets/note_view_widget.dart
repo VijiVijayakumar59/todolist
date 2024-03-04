@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:todolist/view/home/widgets/sizedBox.dart';
+import 'package:todolist/utils/constants/colors.dart';
+import 'package:todolist/utils/constants/sized_Box.dart';
 
-Widget noteView(BuildContext context, File? imageFile, String title, String note) {
+Widget noteView(
+    BuildContext context, File? imageFile, String title, String note) {
   return Stack(
     children: <Widget>[
       Container(
@@ -10,11 +12,11 @@ Widget noteView(BuildContext context, File? imageFile, String title, String note
         margin: const EdgeInsets.only(top: 50),
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          color: Colors.white,
+          color: whiteColor,
           borderRadius: BorderRadius.circular(10),
           boxShadow: const [
             BoxShadow(
-              color: Colors.black,
+              color: blackColor,
               offset: Offset(0, 10),
               blurRadius: 10,
             ),
@@ -60,10 +62,10 @@ Widget noteView(BuildContext context, File? imageFile, String title, String note
           backgroundImage: imageFile != null ? FileImage(imageFile) : null,
           child: imageFile == null
               ? const Icon(
-            Icons.person,
-            size: 30,
-            color: Colors.white,
-          )
+                  Icons.person,
+                  size: 30,
+                  color: whiteColor,
+                )
               : null,
         ),
       ),

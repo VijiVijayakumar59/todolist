@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:todolist/controller/image_controller.dart';
+import 'package:todolist/controller/todo_controller.dart';
+import 'package:todolist/utils/constants/sized_Box.dart';
 
 class EditScreen extends StatelessWidget {
   final int noteIndex;
 
-  const EditScreen({Key? key, required this.noteIndex}) : super(key: key);
+  const EditScreen({
+    Key? key,
+    required this.noteIndex,
+  }) : super(
+          key: key,
+        );
 
   @override
   Widget build(BuildContext context) {
-    final ImagePickerController controller = Get.find();
-
-    // Get the existing note details
+    final TodoController controller = Get.find();
     Map<String, dynamic> existingNote = controller.notes[noteIndex];
-
-    // Initialize controllers with existing details
     TextEditingController titleController =
         TextEditingController(text: existingNote['title']);
     TextEditingController noteController =
@@ -43,7 +45,6 @@ class EditScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  // Display existing image
                   if (controller.pickedImageFile.value != null)
                     Stack(
                       children: [
@@ -65,8 +66,7 @@ class EditScreen extends StatelessWidget {
                         )
                       ],
                     ),
-
-                  const SizedBox(height: 20),
+                  const KHeight(size: 0.03),
                   TextFormField(
                     controller: titleController,
                     decoration: const InputDecoration(
@@ -74,7 +74,7 @@ class EditScreen extends StatelessWidget {
                       border: OutlineInputBorder(),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const KHeight(size: 0.03),
                   TextFormField(
                     controller: noteController,
                     maxLines: 5,
@@ -82,8 +82,9 @@ class EditScreen extends StatelessWidget {
                       labelText: 'Notes',
                       border: OutlineInputBorder(),
                     ),
+                    keyboardType: TextInputType.emailAddress,
                   ),
-                  const SizedBox(height: 20),
+                  const KHeight(size: 0.03),
                   ElevatedButton(
                     onPressed: () {
                       // Create a map with the edited details
@@ -93,11 +94,7 @@ class EditScreen extends StatelessWidget {
                         "imagePath":
                             controller.pickedImageFile.value?.path ?? '',
                       };
-
-                      // Call the editNote method to update the note
                       controller.editNote(noteIndex, editedNote);
-
-                      // Navigate back to the previous screen
                       Get.back();
                     },
                     child: const Text('Update'),
