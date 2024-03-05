@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todolist/utils/constants/colors.dart';
+import 'package:todolist/utils/colors/colors.dart';
 
 class AlertButton extends StatelessWidget {
   final String text;

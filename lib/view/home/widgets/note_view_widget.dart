@@ -1,10 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:todolist/utils/constants/colors.dart';
+import 'package:todolist/utils/colors/colors.dart';
 import 'package:todolist/utils/constants/sized_Box.dart';
 
 Widget noteView(
-    BuildContext context, File? imageFile, String title, String note) {
+  BuildContext context,
+  File? imageFile, // Updated parameter to accept File object
+  String title,
+  String note,
+) {
   return Stack(
     children: <Widget>[
       Container(
@@ -59,7 +63,9 @@ Widget noteView(
         child: CircleAvatar(
           radius: 34,
           backgroundColor: Colors.blue,
-          backgroundImage: imageFile != null ? FileImage(imageFile) : null,
+          backgroundImage: imageFile != null
+              ? FileImage(imageFile)
+              : null, // Use backgroundImage with FileImage
           child: imageFile == null
               ? const Icon(
                   Icons.person,

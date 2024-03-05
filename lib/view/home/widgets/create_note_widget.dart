@@ -60,7 +60,8 @@ class CreateNoteScreen extends StatelessWidget {
                                 backgroundImage:
                                     controller.pickedImageFile.value != null
                                         ? FileImage(
-                                            controller.pickedImageFile.value!)
+                                            controller.pickedImageFile.value!,
+                                          )
                                         : null,
                               ),
                               Positioned(
@@ -72,7 +73,7 @@ class CreateNoteScreen extends StatelessWidget {
                                   },
                                   icon: const Icon(Icons.edit),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                           const SizedBox(height: 20),
