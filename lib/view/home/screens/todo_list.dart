@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:todolist/controller/delete_confirmation.dart';
-import 'package:todolist/controller/share.dart';
+import 'package:todolist/view/home/widgets/delete_confirmation.dart';
+import 'package:todolist/view/home/widgets/share.dart';
 import 'package:todolist/controller/todo_controller.dart';
 import 'package:todolist/utils/colors/colors.dart';
 import 'package:todolist/view/edit/screens/edit_screen.dart';
@@ -178,7 +178,8 @@ class TodoListScreen extends StatelessWidget {
                                 context,
                                 todoController.notes[index]['title'],
                                 todoController.notes[index]['note'],
-                                todoController.pickedImageFile.value,
+                                File(todoController.notes[index]
+                                    ['imagePath']), // Convert String to File
                               );
                             } else if (value == 3) {
                               deleteConfirmationDialog(

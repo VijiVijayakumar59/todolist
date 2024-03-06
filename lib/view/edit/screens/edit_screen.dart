@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todolist/controller/todo_controller.dart';
+import 'package:todolist/view/home/widgets/text_form_widget.dart';
 
 class EditScreen extends StatefulWidget {
   final int noteIndex;
@@ -72,9 +73,8 @@ class _EditScreenState extends State<EditScreen> {
                                 String? newImagePath =
                                     await controller.pickImageFromGallery();
                                 if (newImagePath != null) {
-                                  print(
-                                      "New image path selected: $newImagePath");
                                   imagePath = newImagePath;
+                                  controller.update();
                                 }
                               },
                               icon: const Icon(Icons.edit),
@@ -83,21 +83,33 @@ class _EditScreenState extends State<EditScreen> {
                         ],
                       ),
                       const SizedBox(height: 16),
-                      TextFormField(
+                      TextFormWidget(
                         controller: titleController,
-                        decoration: const InputDecoration(
-                          labelText: 'Title',
-                          border: OutlineInputBorder(),
-                        ),
+                        onChanged: (value) {
+                          controller.title.value = value;
+                        },
+                        text: "Title",
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Title cannot be empty';
+                          }
+                          return null;
+                        },
                       ),
-                      const SizedBox(height: 16),
-                      TextFormField(
+                      const SizedBox(height: 20),
+                      TextFormWidget(
                         controller: noteController,
+                        onChanged: (value) {
+                          controller.note.value = value;
+                        },
+                        text: "Note",
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Note cannot be empty';
+                          }
+                          return null;
+                        },
                         maxLines: 5,
-                        decoration: const InputDecoration(
-                          labelText: 'Notes',
-                          border: OutlineInputBorder(),
-                        ),
                         keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: 16),

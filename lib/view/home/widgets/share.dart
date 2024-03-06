@@ -6,7 +6,7 @@ import 'package:share_plus/share_plus.dart';
 
 Future<void> onShare(
     BuildContext context, String title, String note, File? imageFile) async {
-  String text = '$title\n$note';
+  String text = 'Title : $title\nNote : $note';
 
   try {
     if (imageFile != null) {

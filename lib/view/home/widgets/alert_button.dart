@@ -13,7 +13,7 @@ class AlertButton extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height * 0.05,
       width: MediaQuery.of(context).size.width * 0.17,
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(2),
       child: Text(
         text,
         style: const TextStyle(

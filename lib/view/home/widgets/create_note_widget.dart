@@ -1,13 +1,23 @@
-// ignore_for_file: avoid_print
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todolist/controller/todo_controller.dart';
+import 'package:todolist/view/home/widgets/text_form_widget.dart';
 
-class CreateNoteScreen extends StatelessWidget {
+class CreateNoteScreen extends StatefulWidget {
   const CreateNoteScreen({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<CreateNoteScreen> createState() => _CreateNoteScreenState();
+}
+
+class _CreateNoteScreenState extends State<CreateNoteScreen> {
+  String? newImage;
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -40,77 +50,94 @@ class CreateNoteScreen extends StatelessWidget {
               top: 8,
             ),
             child: SingleChildScrollView(
-              child: GetBuilder<TodoController>(
-                builder: (controller) => Obx(
-                  () => Card(
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Stack(
-                            children: [
-                              CircleAvatar(
-                                radius: 40,
-                                backgroundColor: Colors.grey,
-                                backgroundImage:
-                                    controller.pickedImageFile.value != null
-                                        ? FileImage(
-                                            controller.pickedImageFile.value!,
-                                          )
-                                        : null,
-                              ),
-                              Positioned(
-                                bottom: -1,
-                                left: 48,
-                                child: IconButton(
-                                  onPressed: () async {
-                                    await controller.pickImageFromGallery();
-                                  },
-                                  icon: const Icon(Icons.edit),
+              child: Form(
+                key: formKey,
+                child: Card(
+                  elevation: 10,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundColor: Colors.grey,
+                              backgroundImage: newImage != null
+                                  ? FileImage(
+                                      File(newImage!),
+                                    )
+                                  : null,
+                            ),
+                            Positioned(
+                              bottom: -1,
+                              left: 48,
+                              child: IconButton(
+                                onPressed: () async {
+                                  final String? imagePath =
+                                      await controller.pickImageFromGallery();
+                                  if (imagePath != null) {
+                                    setState(() {
+                                      newImage = imagePath;
+                                    });
+                                  }
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
                                 ),
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          TextFormField(
-                            controller: titleController,
-                            onChanged: (value) =>
-                                controller.title.value = value,
-                            decoration: const InputDecoration(
-                              labelText: 'Title',
-                              border: OutlineInputBorder(),
                             ),
-                          ),
-                          const SizedBox(height: 20),
-                          TextFormField(
-                            controller: noteController,
-                            onChanged: (value) => controller.note.value = value,
-                            maxLines: 5,
-                            decoration: const InputDecoration(
-                              labelText: 'Notes',
-                              border: OutlineInputBorder(),
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                          ),
-                          const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () async {
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormWidget(
+                          controller: titleController,
+                          onChanged: (value) {
+                            controller.title.value = value;
+                          },
+                          text: "Title",
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Title cannot be empty';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormWidget(
+                          controller: noteController,
+                          onChanged: (value) {
+                            controller.note.value = value;
+                          },
+                          text: "Note",
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Note cannot be empty';
+                            }
+                            return null;
+                          },
+                          maxLines: 5,
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (formKey.currentState!.validate()) {
                               controller.title.value = titleController.text;
                               controller.note.value = noteController.text;
                               await controller.createNote();
                               titleController.clear();
                               noteController.clear();
                               Get.back();
-                            },
-                            child: const Text('Save'),
-                          ),
-                        ],
-                      ),
+                            }
+                          },
+                          child: const Text('Save'),
+                        ),
+                      ],
                     ),
                   ),
                 ),
