@@ -10,8 +10,8 @@ class TodoModel extends HiveObject {
   @HiveField(2)
   String? imagePath;
   TodoModel({
-    this.note,
-    this.title,
-    this.imagePath,
+    required this.note,
+    required this.title,
+    required this.imagePath,
   });
 }

@@ -1,16 +1,27 @@
 import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+import 'package:todolist/model/todo_model.dart';
+
 class TodoController extends GetxController {
+  late Box<TodoModel> todoModel;
   final noteBox = Hive.box('note_box');
   Rx<File?> pickedImageFile = Rx<File?>(null);
   RxString title = ''.obs;
   RxString note = ''.obs;
   RxList<Map<String, dynamic>> notes = <Map<String, dynamic>>[].obs;
+
+  Future<void> getData() async {
+    for (var i = 0; i < noteBox.length; i++) {
+      Map<String, dynamic>? noteData = noteBox.getAt(i);
+      if (noteData != null) {
+        notes.add(noteData);
+      }
+    }
+  }
 
   //===================image updation==================//
   final ImagePicker picker = ImagePicker();
@@ -20,16 +31,16 @@ class TodoController extends GetxController {
     if (image != null) {
       final String imagePath = image.path;
       Get.find<TodoController>().updateImage(imagePath);
-      return imagePath; // Return the selected image path
+      return imagePath;
     }
-    return null; // Return null if no image is picked
+    return null;
   }
 
   var imagePath = ''.obs;
 
   void updateImage(String path) {
     imagePath.value = path;
-    log(imagePath.value); // Add this line for debugging
+    log(imagePath.value);
   }
 
   //===================create note====================//

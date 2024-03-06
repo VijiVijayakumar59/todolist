@@ -28,7 +28,7 @@ class TextFormWidget extends StatelessWidget {
       keyboardType: keyboardType,
       decoration: InputDecoration(
         labelText: text,
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
       ),
     );
   }

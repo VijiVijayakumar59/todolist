@@ -4,18 +4,31 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:todolist/view/home/widgets/delete_confirmation.dart';
-import 'package:todolist/view/home/widgets/share.dart';
+import 'package:todolist/view/home/widgets/delete_confirmation_widget.dart';
+import 'package:todolist/view/home/widgets/share_widget.dart';
 import 'package:todolist/controller/todo_controller.dart';
 import 'package:todolist/utils/colors/colors.dart';
-import 'package:todolist/view/edit/screens/edit_screen.dart';
-import 'package:todolist/view/home/widgets/create_note_widget.dart';
+import 'package:todolist/view/edit/edit_screen.dart';
+import 'package:todolist/view/create_note/create_note_screen.dart';
 import 'package:todolist/view/home/widgets/note_view_widget.dart';
-import 'package:todolist/view/home/widgets/alert_button.dart';
+import 'package:todolist/view/home/widgets/alert_button_widget.dart';
 import 'package:todolist/utils/constants/sized_Box.dart';
 
-class TodoListScreen extends StatelessWidget {
+class TodoListScreen extends StatefulWidget {
   const TodoListScreen({Key? key}) : super(key: key);
+
+  @override
+  State<TodoListScreen> createState() => _TodoListScreenState();
+}
+
+class _TodoListScreenState extends State<TodoListScreen> {
+  final TodoController todoController = Get.find();
+
+  @override
+  void initState() {
+    super.initState();
+    todoController.getData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,14 +60,14 @@ class TodoListScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: const AlertButton(text: "Cancel"),
+                            child: const AlertButtonWidget(text: "Cancel"),
                           ),
                           TextButton(
                             onPressed: () {
                               todoController.deleteAllNotes();
                               Get.back();
                             },
-                            child: const AlertButton(text: "Delete"),
+                            child: const AlertButtonWidget(text: "Delete"),
                           ),
                         ],
                       );
@@ -174,15 +187,14 @@ class TodoListScreen extends StatelessWidget {
                                 }
                               });
                             } else if (value == 2) {
-                              onShare(
+                              shareWidget(
                                 context,
                                 todoController.notes[index]['title'],
                                 todoController.notes[index]['note'],
-                                File(todoController.notes[index]
-                                    ['imagePath']), // Convert String to File
+                                File(todoController.notes[index]['imagePath']),
                               );
                             } else if (value == 3) {
-                              deleteConfirmationDialog(
+                              deleteConfirmationWidget(
                                   context, index, todoController);
                             }
                           },
@@ -201,7 +213,7 @@ class TodoListScreen extends StatelessWidget {
           child: FloatingActionButton(
             backgroundColor: const Color.fromARGB(255, 111, 13, 129),
             onPressed: () {
-              Get.to(CreateNoteScreen());
+              Get.to(const CreateNoteScreen());
             },
             child: const Icon(Icons.add, color: whiteColor),
           ),

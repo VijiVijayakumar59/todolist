@@ -19,6 +19,7 @@ class TodoModelAdapter extends TypeAdapter<TodoModel> {
     return TodoModel(
       note: fields[1] as String?,
       title: fields[0] as String?,
+      imagePath: fields[2] as String?,
     );
   }
 

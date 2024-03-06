@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
-Future<void> onShare(
+Future<void> shareWidget(
     BuildContext context, String title, String note, File? imageFile) async {
   String text = 'Title : $title\nNote : $note';
 

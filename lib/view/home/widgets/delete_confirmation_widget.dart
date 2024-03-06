@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/controller/todo_controller.dart';
 
-Future<void> deleteConfirmationDialog(
+Future<void> deleteConfirmationWidget(
     BuildContext context, int index, TodoController imageController) async {
   return showDialog(
     context: context,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/utils/colors/colors.dart';
 
-class AlertButton extends StatelessWidget {
+class AlertButtonWidget extends StatelessWidget {
   final String text;
-  const AlertButton({
+  const AlertButtonWidget({
     super.key,
     required this.text,
   });
